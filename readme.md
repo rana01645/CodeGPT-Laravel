@@ -14,7 +14,7 @@ CodeGPT For Laravel is an IntelliJ plugin that makes it easy to generate test ca
 - An OpenAI API key (you can get one [here](https://platform.openai.com/account/api-keys))
 
 ## Installation
-You can install CodeGPT for Laravel from the [Intellij Marketplace](https://plugins.jetbrains.com/plugin/21184-codegpt-for-laravel). Alternatively, you can build the plugin from source by following these steps:
+You can install CodeGPT for Laravel from the [Intellij Marketplace](https://plugins.jetbrains.com/plugin/21187-codegpt-for-laravel). Alternatively, you can build the plugin from source by following these steps:
 
 1. Clone the repository
 2. Open the project in IntelliJ IDEA
