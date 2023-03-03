@@ -1,0 +1,52 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.trickbd.CodeGPT</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>CodeGPT For Laravel</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="plugin@trickbd.com" url="https://www.trickbd.com">Trickbd</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    CodeGPT For Laravel is a powerful IntelliJ plugin that helps Laravel developers to write code faster and with less effort. With this plugin, you can generate test cases for your Laravel code base and explain specific code in human-readable format using OpenAI's Codex API. Save time and write better code with CodeGPT For Laravel.
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="GenerateTestCase" icon="AllIcons.General.Information" displayType="BALLOON"/>
+
+
+    </extensions>
+    <actions>
+        <group id="GenerateTestCaseGroup" text="Generate Test Case">
+            <action id="GenerateTestCaseAction" class="com.trickbd.codegpt.action.GenerateTestCaseAction"
+                    text="Generate Test Case"
+                    icon="AllIcons.Nodes.Test"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
+        <group id="ExplainCodeGroup" text="Explain This Code">
+            <action id="ExplainCodeAction" class="com.trickbd.codegpt.action.ExplainCodeAction"
+                    text="Explain This Code"
+                    icon="AllIcons.RunConfigurations.TestUnknown"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
+        <group id="UpdateAPIKeyGroup" text="Manage API Key">
+            <action id="UpdateAPIKeyAction" class="com.trickbd.codegpt.action.UpdateOrChangeApiKeyAction"
+                    text="Manage API Key"
+                    icon="AllIcons.Nodes.KeymapEditor"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
+    </actions>
+
+</idea-plugin>
