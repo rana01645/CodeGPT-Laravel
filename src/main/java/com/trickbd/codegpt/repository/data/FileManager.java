@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public class FileManager {
 
-    public static void saveFile(String directory, String filename, String content, Project project) throws IOException {
+    public static VirtualFile saveFile(String directory, String filename, String content, Project project) throws IOException {
         // Get the base path of the project
         String basePath = project.getBasePath();
 
@@ -28,6 +28,7 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return file;
     }
 
     public String readFile(VirtualFile file) {

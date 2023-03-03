@@ -33,8 +33,6 @@ public class CodeExplainer {
     }
 
     public void explain() {
-        System.out.println("apiKey");
-        System.out.println(apiKey);
 
         OpenAIChatApi api = new OpenAIChatApi(apiKey);
 
@@ -49,8 +47,6 @@ public class CodeExplainer {
             // Handle successful response
             for (OpenAIChatApi.Choice choice : response.getChoices()) {
                 OpenAIChatApi.Message message = choice.getMessage();
-                System.out.println(message.getRole() + ": " + message.getContent());
-
 
                 String content = message.getContent();
 

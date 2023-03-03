@@ -11,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TestCaseGenerator {
     String apiKey;
@@ -28,8 +29,6 @@ public class TestCaseGenerator {
     }
 
     public void generateTestCase() {
-        System.out.println("apiKey");
-        System.out.println(apiKey);
 
         OpenAIChatApi api = new OpenAIChatApi(apiKey);
 
@@ -44,7 +43,6 @@ public class TestCaseGenerator {
             // Handle successful response
             for (OpenAIChatApi.Choice choice : response.getChoices()) {
                 OpenAIChatApi.Message message = choice.getMessage();
-                System.out.println(message.getRole() + ": " + message.getContent());
 
 
                 String content = message.getContent();
@@ -54,18 +52,20 @@ public class TestCaseGenerator {
                 ApplicationManager.getApplication().invokeLater(() -> {
                     Project project = e.getProject();
                     assert project != null;
+                    AtomicReference<VirtualFile> generatedFile = new AtomicReference<>();
                     ApplicationManager.getApplication().runWriteAction(() -> {
                         try {
-                            FileManager.saveFile(directory, filename, content.trim(), project);
+                            generatedFile.set(FileManager.saveFile(directory, filename, content.trim(), project));
                         } catch (IOException ex) {
                             System.out.println("error" + ex.getMessage());
                             throw new RuntimeException(ex);
                         }
                     });
+                    // Show a notification to indicate that the action was successful
+                    Notifier.notifyAndOpenFIle("Test case generated", "A test case was generated for " + file.getName(), generatedFile.get().getPath(), project);
                 });
             }
-            // Show a notification to indicate that the action was successful
-            Notifier.notifySuccess("Test case generated", "A test case was generated for " + file.getName());
+
         }).exceptionally(ex -> {
             System.out.println("error" + ex.getMessage());
             // Handle exception

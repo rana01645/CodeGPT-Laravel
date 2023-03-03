@@ -29,21 +29,21 @@
 
     </extensions>
     <actions>
-        <group id="GenerateTestCaseGroup" text="Generate Test Case">
+        <group id="GenerateTestCaseGroup" text="CodeGPT - Generate Test Case">
             <action id="GenerateTestCaseAction" class="com.trickbd.codegpt.action.GenerateTestCaseAction"
-                    text="Generate Test Case"
+                    text="CodeGPT - Generate Test Case"
                     icon="AllIcons.Nodes.Test"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
-        <group id="ExplainCodeGroup" text="Explain This Code">
+        <group id="ExplainCodeGroup" text="CodeGPT - Explain This Code">
             <action id="ExplainCodeAction" class="com.trickbd.codegpt.action.ExplainCodeAction"
-                    text="Explain This Code"
+                    text="CodeGPT - Explain This Code"
                     icon="AllIcons.RunConfigurations.TestUnknown"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
-        <group id="UpdateAPIKeyGroup" text="Manage API Key">
+        <group id="UpdateAPIKeyGroup" text="CodeGPT - Manage API Key">
             <action id="UpdateAPIKeyAction" class="com.trickbd.codegpt.action.UpdateOrChangeApiKeyAction"
-                    text="Manage API Key"
+                    text="CodeGPT - Manage API Key"
                     icon="AllIcons.Nodes.KeymapEditor"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
