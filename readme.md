@@ -1,4 +1,4 @@
-# CodeGPT For Laravel
+# CodeGPT - ChatGPT For Laravel
 
 CodeGPT For Laravel is an IntelliJ plugin that makes it easy to generate test cases for your Laravel codebase and explain specific code in a human-readable format using OpenAI's API. 
 

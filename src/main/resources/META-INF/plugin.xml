@@ -5,7 +5,7 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>CodeGPT For Laravel</name>
+    <name>CodeGPT - ChatGPT For Laravel</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="plugin@trickbd.com" url="https://www.trickbd.com">Trickbd</vendor>
@@ -14,7 +14,7 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    CodeGPT For Laravel is a powerful IntelliJ plugin that helps Laravel developers to write code faster and with less effort. With this plugin, you can generate test cases for your Laravel code base and explain specific code in human-readable format using OpenAI's Codex API. Save time and write better code with CodeGPT For Laravel.
+    CodeGPT For Laravel is a powerful IntelliJ plugin that helps Laravel developers to write code faster and with less effort using ChatGPT API. With this plugin, you can generate test cases for your Laravel code base and explain specific code in human-readable format using OpenAI's Codex API (ChatGPT API). Save time and write better code with CodeGPT - ChatGPT For Laravel.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
