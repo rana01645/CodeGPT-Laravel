@@ -51,9 +51,12 @@ public class OpenAIChatApi {
         if (responseBody == null) {
             throw new IOException("Response body is null");
         }
-
-        json = responseBody.string();
-        return gson.fromJson(json, ChatCompletionResponse.class);
+        try {
+            json = responseBody.string();
+            return gson.fromJson(json, ChatCompletionResponse.class);
+        } finally {
+            responseBody.close();
+        }
     }
 
     public CompletableFuture<ChatCompletionResponse> sendChatCompletionRequestAsync(String model, ChatMessageRequest[] messages) {

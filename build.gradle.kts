@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.afjalurrana"
-version = "1.01-SNAPSHOT"
+version = "1.02"
 
 repositories {
   mavenCentral()

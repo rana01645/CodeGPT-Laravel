@@ -1,4 +1,4 @@
-package com.trickbd.codegpt.helper;
+package com.trickbd.codegpt.ui;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationAction;
