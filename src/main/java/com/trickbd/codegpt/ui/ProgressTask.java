@@ -10,8 +10,11 @@ public class ProgressTask extends Task.Backgroundable {
     private final CompletableFuture<?> futureResponse;
     private final String message;
 
+    private final String title;
+
     public ProgressTask(@NotNull String title, @NotNull String message, @NotNull CompletableFuture<?> futureResponse) {
         super(null, title);
+        this.title = title;
         this.futureResponse = futureResponse;
         this.message = message;
     }
@@ -20,7 +23,8 @@ public class ProgressTask extends Task.Backgroundable {
 public void run(@NotNull ProgressIndicator indicator) {
     // Show the progress indicator
     indicator.setIndeterminate(true);
-    indicator.setText(message);
+    indicator.setText(title);
+    indicator.setText2(message);
 
     // Wait for the future to complete or for a cancellation request
       while (!futureResponse.isDone() && !indicator.isCanceled()) {

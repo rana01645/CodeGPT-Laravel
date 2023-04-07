@@ -17,21 +17,21 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class SeederGenerator {
     private final String apiKey;
-    private final String modelContents;
+    private final String modelName;
     private final String migrationContents;
     private final VirtualFile file;
     private final AnActionEvent e;
 
-    public SeederGenerator(String apiKey, String modelContents, String migrationContents, VirtualFile file, AnActionEvent e) {
+    public SeederGenerator(String apiKey, String modelName, String migrationContents, VirtualFile file,
+                           AnActionEvent e) {
         this.apiKey = apiKey;
-        this.modelContents = modelContents;
+        this.modelName = modelName;
         this.migrationContents = migrationContents;
         this.file = file;
         this.e = e;
     }
 
     public void generateSeeder() {
-        String modelName = ModelParser.parseModelName(modelContents);
 
         OpenAIChatApi api = new OpenAIChatApi(apiKey);
 
@@ -44,7 +44,8 @@ public class SeederGenerator {
 
         CompletableFuture<OpenAIChatApi.ChatCompletionResponse> factoryFutureResponse = api.sendChatCompletionRequestAsync(model, factoryMessages);
 
-        ProgressTask progressTask = new ProgressTask("Model Factory Generator", "Generating model factory...", factoryFutureResponse);
+        ProgressTask progressTask = new ProgressTask("Model Factory Generator", "Generating "+modelName+" factory...",
+                factoryFutureResponse);
         ProgressManager.getInstance().run(progressTask);
 
         factoryFutureResponse.thenAccept(factoryResponse -> {
@@ -52,7 +53,6 @@ public class SeederGenerator {
             for (OpenAIChatApi.Choice factoryChoice : factoryResponse.getChoices()) {
                 OpenAIChatApi.Message factoryMessage = factoryChoice.getMessage();
                 String factoryContent = factoryMessage.getContent();
-                System.out.println("Factory content: " + factoryContent);
 
                 String factoryFileName = modelName + "Factory.php";
                 String directory = "database/factories";
@@ -77,8 +77,8 @@ public class SeederGenerator {
                     // Show a notification to indicate that the action was successful
                     if (factoryFile.get() != null) {
                         Notifier.notifyAndOpenFIle(
-                                "Model factory generated",
-                                "A model factory was generated for " + modelName,
+                                modelName+" factory generated",
+                                "A factory was generated for " + modelName,
                                 "Open Factory file",
                                 factoryFile.get().getPath(),
                                 project
@@ -89,14 +89,16 @@ public class SeederGenerator {
 
             OpenAIChatApi.ChatMessageRequest[] seederMessages = {
                     new OpenAIChatApi.ChatMessageRequest("user",
-                            "generate a PHP Laravel seeder class where factory exists for this " + modelName +
-                                    " model with the following migration data(Give only full PHP code):\n" + migrationContents)
+                            "generate a PHP Laravel seeder class where factory exists for this " + modelName + " " +
+                                    "model (Give only PHP code and use laravel latest syntax like  Model::factory()->count(5)->create();," +
+                                    " no additional text or instructions)")
             };
 
             CompletableFuture<OpenAIChatApi.ChatCompletionResponse>
                     seederFutureResponse = api.sendChatCompletionRequestAsync(model, seederMessages);
 
-            ProgressTask seederProgressTask = new ProgressTask("Model Seeder Generator", "Generating model seeder...", seederFutureResponse);
+            ProgressTask seederProgressTask = new ProgressTask("Model Seeder Generator", "Generating "+modelName+" seeder...",
+                    seederFutureResponse);
             ProgressManager.getInstance().run(seederProgressTask);
 
             seederFutureResponse.thenAccept(seederResponse -> {
@@ -107,7 +109,7 @@ public class SeederGenerator {
                     System.out.println("Seeder content: " + seederContent);
 
 
-                    String seederFileName = modelName + "TableSeeder.php";
+                    String seederFileName = modelName + "Seeder.php";
                     String directory = "database/seeders";
 
                     ApplicationManager.getApplication().invokeLater(() -> {
@@ -130,7 +132,7 @@ public class SeederGenerator {
                         // Show a notification to indicate that the action was successful
                         if (seederFile.get() != null) {
                             Notifier.notifyAndOpenFIle(
-                                    "Model seeder generated",
+                                    modelName+" seeder generated",
                                     "A model seeder was generated for " + modelName,
                                     "Open Seeder File",
                                     seederFile.get().getPath(),
