@@ -53,7 +53,8 @@ public class Notifier {
     }
 
     //notify and open file
-    public static void notifyAndOpenFIle(String title, String message, String path, Project project) {
+    public static void notifyAndOpenFIle(String title, String message,String actionTitle, String path,
+                                         Project project) {
 
         Notification notification = new Notification(
                 "GenerateTestCase",
@@ -62,7 +63,7 @@ public class Notifier {
                 NotificationType.INFORMATION
         );
 
-        notification.addAction(new NotificationAction("Open Test file") {
+        notification.addAction(new NotificationAction(actionTitle) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
                 VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(path);

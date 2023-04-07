@@ -70,7 +70,13 @@ public class TestCaseGenerator {
                         }
                     });
                     // Show a notification to indicate that the action was successful
-                    Notifier.notifyAndOpenFIle("Test case generated", "A test case was generated for " + file.getName(), generatedFile.get().getPath(), project);
+                    Notifier.notifyAndOpenFIle(
+                            "Test case generated",
+                            "A test case was generated for " + file.getName(),
+                            "Open Test File",
+                            generatedFile.get().getPath(),
+                            project
+                    );
                 });
             }
 

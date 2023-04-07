@@ -35,18 +35,26 @@
                     icon="AllIcons.Nodes.Test"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
+        <group id="GenerateSeederGroup" text="CodeGPT -Generate Factory And Seeder">
+            <action id="GenerateSeederGroupAction" class="com.trickbd.codegpt.action.GenerateSeederAction"
+                    text="Generate Model Seeder"
+                    icon="AllIcons.Diff.MagicResolve"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </group>
         <group id="ExplainCodeGroup" text="CodeGPT - Explain This Code">
             <action id="ExplainCodeAction" class="com.trickbd.codegpt.action.ExplainCodeAction"
                     text="CodeGPT - Explain This Code"
                     icon="AllIcons.RunConfigurations.TestUnknown"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
+
         <group id="UpdateAPIKeyGroup" text="CodeGPT - Manage API Key">
             <action id="UpdateAPIKeyAction" class="com.trickbd.codegpt.action.UpdateOrChangeApiKeyAction"
                     text="CodeGPT - Manage API Key"
                     icon="AllIcons.Nodes.KeymapEditor"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
+
     </actions>
 
 </idea-plugin>

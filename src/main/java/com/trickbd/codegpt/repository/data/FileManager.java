@@ -5,10 +5,19 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class FileManager {
+    private static FileManager instance;
+
+    public static FileManager getInstance() {
+        if (instance == null) {
+            instance = new FileManager();
+        }
+        return instance;
+    }
 
     public static VirtualFile saveFile(String directory, String filename, String content, Project project) throws IOException {
         // Get the base path of the project
