@@ -1,10 +1,10 @@
 plugins {
   id("java")
-  id("org.jetbrains.intellij") version "1.8.0"
+  id("org.jetbrains.intellij") version "1.13.3"
 }
 
 group = "com.afjalurrana"
-version = "1.02"
+version = "1.03"
 
 repositories {
   mavenCentral()
@@ -33,7 +33,7 @@ tasks {
 
   patchPluginXml {
     sinceBuild.set("213")
-    untilBuild.set("223.*")
+    untilBuild.set("231.*")
   }
 
   signPlugin {
