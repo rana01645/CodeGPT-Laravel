@@ -4,22 +4,11 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
 import com.trickbd.codegpt.generator.CodeExplainer;
-import com.trickbd.codegpt.generator.TestCaseGenerator;
 import com.trickbd.codegpt.repository.data.FileManager;
 import com.trickbd.codegpt.repository.data.LocalData;
 import com.trickbd.codegpt.settings.SettingsPanel;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class ExplainCodeAction extends AnAction {
 

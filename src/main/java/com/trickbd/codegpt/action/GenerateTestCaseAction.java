@@ -1,16 +1,13 @@
 package com.trickbd.codegpt.action;
 
-import com.trickbd.codegpt.generator.TestCaseGenerator;
-import com.trickbd.codegpt.repository.data.FileManager;
-import com.trickbd.codegpt.repository.data.LocalData;
-import com.trickbd.codegpt.settings.SettingsPanel;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import com.trickbd.codegpt.generator.TestCaseGenerator;
+import com.trickbd.codegpt.repository.data.FileManager;
+import com.trickbd.codegpt.repository.data.LocalData;
+import com.trickbd.codegpt.settings.SettingsPanel;
 
 public class GenerateTestCaseAction extends AnAction {
 
