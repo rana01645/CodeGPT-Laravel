@@ -21,7 +21,12 @@ intellij {
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
+  implementation("org.junit.jupiter:junit-jupiter:5.8.1")
+  testImplementation("org.mockito:mockito-core:3.8.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 }
+
 
 
 tasks {

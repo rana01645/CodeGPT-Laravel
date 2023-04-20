@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.trickbd.codegpt.helper.TestParser;
 import com.trickbd.codegpt.repository.api.OpenAIChatApi;
-import com.trickbd.codegpt.repository.data.FileManager;
+import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.ui.Notifier;
 import com.trickbd.codegpt.ui.ProgressTask;
 
@@ -60,7 +60,7 @@ public class TestCaseGenerator {
                     AtomicReference<VirtualFile> generatedFile = new AtomicReference<>();
                     ApplicationManager.getApplication().runWriteAction(() -> {
                         try {
-                            generatedFile.set(FileManager.saveFile(directory, filename, content.trim(), project));
+                            generatedFile.set(FileManager.getInstance().saveFile(directory, filename, content.trim(), project));
                         } catch (IOException ex) {
                             System.out.println("error" + ex.getMessage());
                             throw new RuntimeException(ex);

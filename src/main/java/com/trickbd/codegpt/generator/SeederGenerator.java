@@ -6,7 +6,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.trickbd.codegpt.repository.api.OpenAIChatApi;
-import com.trickbd.codegpt.repository.data.FileManager;
+import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.ui.Notifier;
 import com.trickbd.codegpt.ui.ProgressTask;
 
@@ -65,7 +65,8 @@ public class SeederGenerator {
                     ApplicationManager.getApplication().runWriteAction(() -> {
                         try {
                             if (factoryContent != null) {
-                                factoryFile.set(FileManager.saveFile(directory, factoryFileName, factoryContent.trim(), project));
+                                factoryFile.set(FileManager.getInstance().saveFile(directory, factoryFileName,
+                                        factoryContent.trim(), project));
                             }
                         } catch (IOException ex) {
                             System.out.println("Error: " + ex.getMessage());
@@ -120,7 +121,8 @@ public class SeederGenerator {
                         ApplicationManager.getApplication().runWriteAction(() -> {
                             try {
                                 if (seederContent != null) {
-                                    seederFile.set(FileManager.saveFile(directory, seederFileName, seederContent.trim(), project));
+                                    seederFile.set(FileManager.getInstance().saveFile(directory, seederFileName,
+                                            seederContent.trim(), project));
                                 }
                             } catch (IOException ex) {
                                 System.out.println("Error: " + ex.getMessage());

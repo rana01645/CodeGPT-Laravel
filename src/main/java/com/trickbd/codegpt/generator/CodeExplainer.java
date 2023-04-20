@@ -12,6 +12,8 @@ import com.intellij.ui.content.ContentFactory;
 import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.ui.ProgressTask;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.concurrent.CompletableFuture;
 
 public class CodeExplainer {

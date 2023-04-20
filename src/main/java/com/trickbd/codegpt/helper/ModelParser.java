@@ -1,7 +1,7 @@
 package com.trickbd.codegpt.helper;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import com.trickbd.codegpt.repository.data.FileManager;
+import com.trickbd.codegpt.repository.data.file.FileManager;
 
 public class ModelParser {
 

@@ -1,6 +1,7 @@
 package com.trickbd.codegpt.action;
 
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -8,8 +9,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.trickbd.codegpt.generator.SeederGenerator;
 import com.trickbd.codegpt.helper.ModelParser;
-import com.trickbd.codegpt.repository.data.FileManager;
-import com.trickbd.codegpt.repository.data.LocalData;
+import com.trickbd.codegpt.repository.data.file.FileManager;
+import com.trickbd.codegpt.repository.data.local.LocalData;
 import com.trickbd.codegpt.settings.SettingsPanel;
 
 import java.util.Arrays;
@@ -48,24 +49,24 @@ public class GenerateSeederAction extends AnAction {
 
         if (isModel){
              VirtualFile migrationFile;
-            modelName = ModelParser.parseModelName((new FileManager()).readFile(modelFile));
+            modelName = ModelParser.parseModelName(FileManager.getInstance().readFile(modelFile));
             migrationFile = findMigrationFileForModel(modelName, project);
             if (migrationFile == null) {
                 return;
             }
 
             // Read the contents of the model and migration files
-            migrationContents = (new FileManager()).readFile(migrationFile);
+            migrationContents = FileManager.getInstance().readFile(migrationFile);
         }else {
             // Read the contents of the model and migration files
             modelName = findModelNameForMigration(modelFile);
-            migrationContents = (new FileManager()).readFile(modelFile);
+            migrationContents = FileManager.getInstance().readFile(modelFile);
         }
 
 
 
         // Generate the seeder
-        String apiKey = LocalData.get("apiKey");
+        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get("apiKey");
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
