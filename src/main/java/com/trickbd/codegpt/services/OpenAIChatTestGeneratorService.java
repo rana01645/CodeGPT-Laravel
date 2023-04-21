@@ -4,17 +4,17 @@ import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 
 import java.util.concurrent.CompletableFuture;
 
-public class OpenAIChatCodeExplanationService implements CodeExplanationService {
+public class OpenAIChatTestGeneratorService implements TestGeneratorService {
     private final OpenAIChatService chatService;
 
-    public OpenAIChatCodeExplanationService(OpenAIChatService chatService) {
+    public OpenAIChatTestGeneratorService(OpenAIChatService chatService) {
         this.chatService = chatService;
     }
 
     @Override
-    public CompletableFuture<String> explainCode(String model, String code) {
+    public CompletableFuture<String> generateTestCase(String model, String code) {
         OpenAIChatApi.ChatMessageRequest[] messages = {
-                new OpenAIChatApi.ChatMessageRequest("user", "Explain this Code\n" + code)
+                new OpenAIChatApi.ChatMessageRequest("user", "generate a PHP Laravel test class for this\n" + code)
         };
 
         return chatService.sendChatRequest(model, messages);

@@ -7,8 +7,10 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.TestCaseGenerator;
+import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.repository.data.local.LocalData;
+import com.trickbd.codegpt.services.*;
 import com.trickbd.codegpt.settings.SettingsPanel;
 
 public class GenerateTestCaseAction extends AnAction {
@@ -28,7 +30,10 @@ public class GenerateTestCaseAction extends AnAction {
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
-                    (new TestCaseGenerator(apiKey1, contents, file, e)).generateTestCase();
+                    OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey1);
+                    OpenAIChatService chatService = new OpenAIChatApiService(api);
+                    TestGeneratorService service = new OpenAIChatTestGeneratorService(chatService);
+                    (new TestCaseGenerator(service, file, e)).generateTestCase(Constants.MODEL,contents);
                 }
 
             });
@@ -36,7 +41,10 @@ public class GenerateTestCaseAction extends AnAction {
             return;
         }
 
-        (new TestCaseGenerator(apiKey, contents, file, e)).generateTestCase();
+        OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey);
+        OpenAIChatService chatService = new OpenAIChatApiService(api);
+        TestGeneratorService service = new OpenAIChatTestGeneratorService(chatService);
+        (new TestCaseGenerator(service, file, e)).generateTestCase(Constants.MODEL, contents);
 
     }
 

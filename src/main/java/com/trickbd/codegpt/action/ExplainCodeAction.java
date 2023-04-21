@@ -12,7 +12,9 @@ import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.repository.data.local.LocalData;
 import com.trickbd.codegpt.services.CodeExplanationService;
+import com.trickbd.codegpt.services.OpenAIChatApiService;
 import com.trickbd.codegpt.services.OpenAIChatCodeExplanationService;
+import com.trickbd.codegpt.services.OpenAIChatService;
 import com.trickbd.codegpt.settings.SettingsPanel;
 
 public class ExplainCodeAction extends AnAction {
@@ -44,7 +46,8 @@ public class ExplainCodeAction extends AnAction {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
                     OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey1);
-                    CodeExplanationService service = OpenAIChatCodeExplanationService.getInstance(api);
+                    OpenAIChatService chatService = new OpenAIChatApiService(api);
+                    CodeExplanationService service = new OpenAIChatCodeExplanationService(chatService);
                     (new CodeExplainer(service, e)).explain(Constants.MODEL, selectedText);
                 }
             });
@@ -53,7 +56,8 @@ public class ExplainCodeAction extends AnAction {
         }
 
         OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey);
-        CodeExplanationService service = OpenAIChatCodeExplanationService.getInstance(api);
+        OpenAIChatService chatService = new OpenAIChatApiService(api);
+        CodeExplanationService service = new OpenAIChatCodeExplanationService(chatService);
         (new CodeExplainer(service, e)).explain(Constants.MODEL, selectedText);
     }
 
