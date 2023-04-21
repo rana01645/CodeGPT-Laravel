@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OpenAIChatApi {
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+    private static OpenAIChatApi instance;
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
@@ -20,6 +21,14 @@ public class OpenAIChatApi {
 
     public OpenAIChatApi(String bearerToken) {
         this.bearerToken = bearerToken;
+    }
+
+    public static OpenAIChatApi getInstance(String apiKey) {
+        if (instance == null) {
+            instance = new OpenAIChatApi(apiKey);
+        }
+
+        return instance;
     }
 
     public ChatCompletionResponse sendChatCompletionRequest(String model, ChatMessageRequest[] messages) throws IOException {

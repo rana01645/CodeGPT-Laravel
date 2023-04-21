@@ -6,9 +6,13 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.CodeExplainer;
+import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.repository.data.local.LocalData;
+import com.trickbd.codegpt.services.CodeExplanationService;
+import com.trickbd.codegpt.services.OpenAIChatCodeExplanationService;
 import com.trickbd.codegpt.settings.SettingsPanel;
 
 public class ExplainCodeAction extends AnAction {
@@ -39,13 +43,18 @@ public class ExplainCodeAction extends AnAction {
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
-                    (new CodeExplainer(apiKey1, selectedText, e)).explain();
+                    OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey1);
+                    CodeExplanationService service = OpenAIChatCodeExplanationService.getInstance(api);
+                    (new CodeExplainer(service, e)).explain(Constants.MODEL, selectedText);
                 }
             });
             settingsPanel.show();
             return;
         }
-        (new CodeExplainer(apiKey, selectedText, e)).explain();
+
+        OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey);
+        CodeExplanationService service = OpenAIChatCodeExplanationService.getInstance(api);
+        (new CodeExplainer(service, e)).explain(Constants.MODEL, selectedText);
     }
 
     @Override
