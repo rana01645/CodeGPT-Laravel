@@ -10,8 +10,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.SeederGenerator;
 import com.trickbd.codegpt.helper.ModelParser;
+import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.repository.data.local.LocalData;
+import com.trickbd.codegpt.services.*;
 import com.trickbd.codegpt.settings.SettingsPanel;
 
 import java.util.Arrays;
@@ -48,8 +50,8 @@ public class GenerateSeederAction extends AnAction {
         String modelName;
         String migrationContents;
 
-        if (isModel){
-             VirtualFile migrationFile;
+        if (isModel) {
+            VirtualFile migrationFile;
             modelName = ModelParser.parseModelName(FileManager.getInstance().readFile(modelFile));
             migrationFile = findMigrationFileForModel(modelName, project);
             if (migrationFile == null) {
@@ -58,12 +60,11 @@ public class GenerateSeederAction extends AnAction {
 
             // Read the contents of the model and migration files
             migrationContents = FileManager.getInstance().readFile(migrationFile);
-        }else {
+        } else {
             // Read the contents of the model and migration files
             modelName = findModelNameForMigration(modelFile);
             migrationContents = FileManager.getInstance().readFile(modelFile);
         }
-
 
 
         // Generate the seeder
@@ -71,14 +72,22 @@ public class GenerateSeederAction extends AnAction {
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
-                    (new SeederGenerator(apiKey1, modelName, migrationContents, modelFile, e)).generateSeeder();
+                    generateFactoryAndSeeder(e, modelName, migrationContents, apiKey1);
                 }
             });
             settingsPanel.show();
             return;
         }
+        generateFactoryAndSeeder(e, modelName, migrationContents, apiKey);
 
-        (new SeederGenerator(apiKey, modelName, migrationContents, modelFile, e)).generateSeeder();
+    }
+
+    private void generateFactoryAndSeeder(AnActionEvent e, String modelName, String migrationContents, String apiKey) {
+        OpenAIChatApi chatApi = new OpenAIChatApi(apiKey);
+        OpenAIChatService chatService = new OpenAIChatApiService(chatApi);
+        FactoryGeneratorService factoryGeneratorService = new OpenAIChatFactoryGeneratorService(chatService);
+        SeederGeneratorService seederGeneratorService = new OpenAIChatSeederGeneratorService(chatService);
+        (new SeederGenerator(factoryGeneratorService, seederGeneratorService, e)).generateFactoryAndSeeder(Constants.MODEL, modelName, migrationContents);
     }
 
     private String findModelNameForMigration(VirtualFile modelFile) {
@@ -90,7 +99,7 @@ public class GenerateSeederAction extends AnAction {
             return null;
         }
         String tableName = matcher.group(1);
-        String modelName =  toPascalCase(tableName);
+        String modelName = toPascalCase(tableName);
         //remove the s from the end of the model name
         modelName = modelName.substring(0, modelName.length() - 1);
         return modelName;
