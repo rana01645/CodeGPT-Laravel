@@ -39,7 +39,7 @@ public class ExplainCodeAction extends AnAction {
     }
 
     private void showExplanation(AnActionEvent e, String selectedText) {
-        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get("apiKey");
+        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get(Constants.API_KEY);
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {

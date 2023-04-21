@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.TestCaseGenerator;
 import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.repository.data.local.LocalData;
@@ -22,7 +23,7 @@ public class GenerateTestCaseAction extends AnAction {
         }
 
         //log the contents
-        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get("apiKey");
+        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get(Constants.API_KEY);
 
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {

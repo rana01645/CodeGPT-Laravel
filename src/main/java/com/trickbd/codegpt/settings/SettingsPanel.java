@@ -1,6 +1,7 @@
 package com.trickbd.codegpt.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
+import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.interfaces.SettingsPanelListener;
 import com.trickbd.codegpt.repository.data.local.LocalData;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -42,7 +43,7 @@ public class SettingsPanel extends DialogWrapper {
         panel.add(apiKeyTextField, constraints);
 
         //update the text field with the current api key
-        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get("apiKey");
+        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get(Constants.API_KEY);
         if (apiKey != null) {
             apiKeyTextField.setText(apiKey);
         }
@@ -67,7 +68,7 @@ public class SettingsPanel extends DialogWrapper {
         // Add button to clear API key
         JButton clearApiKeyButton = new JButton("Clear API Key");
         clearApiKeyButton.addActionListener(e -> {
-            LocalData.getInstance(PropertiesComponent.getInstance()).remove("apiKey");
+            LocalData.getInstance(PropertiesComponent.getInstance()).remove(Constants.API_KEY);
             apiKeyTextField.setText("");
         });
         constraints.gridx = 0;
@@ -81,7 +82,7 @@ public class SettingsPanel extends DialogWrapper {
     @Override
     protected void doOKAction() {
         String apiKey = apiKeyTextField.getText();
-        LocalData.getInstance(PropertiesComponent.getInstance()).set("apiKey", apiKey);
+        LocalData.getInstance(PropertiesComponent.getInstance()).set(Constants.API_KEY, apiKey);
         if (listener != null) {
             listener.onOKClicked(apiKey);
         }

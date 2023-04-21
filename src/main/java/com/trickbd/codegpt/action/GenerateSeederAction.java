@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.SeederGenerator;
 import com.trickbd.codegpt.helper.ModelParser;
 import com.trickbd.codegpt.repository.data.file.FileManager;
@@ -66,7 +67,7 @@ public class GenerateSeederAction extends AnAction {
 
 
         // Generate the seeder
-        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get("apiKey");
+        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get(Constants.API_KEY);
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
