@@ -10,16 +10,18 @@ public class FileManager implements FileOperations {
     private final FileWriter fileWriter;
     private final FileReader fileReader;
 
-    public FileManager(FileWriter fileWriter, FileReader fileReader)
-    {
+    private final ResourceFileReader resourceFileReader;
+
+    public FileManager(FileWriter fileWriter, FileReader fileReader, ResourceFileReader resourceFileReader) {
         this.fileWriter = fileWriter;
         this.fileReader = fileReader;
+        this.resourceFileReader = resourceFileReader;
     }
 
 
     public static FileManager getInstance() {
         if (instance == null) {
-            instance = new FileManager(new FileWriter(), new FileReader());
+            instance = new FileManager(new FileWriter(), new FileReader(), new ResourceFileReader());
         }
         return instance;
     }
@@ -32,5 +34,10 @@ public class FileManager implements FileOperations {
     @Override
     public String readFile(VirtualFile file) {
         return fileReader.readFile(file);
+    }
+
+    @Override
+    public String readResource(String path) {
+        return resourceFileReader.readFile(path);
     }
 }

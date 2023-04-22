@@ -21,6 +21,7 @@ intellij {
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.github.spullara.mustache.java:compiler:0.9.5")
 }
 
 

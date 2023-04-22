@@ -8,4 +8,5 @@ import java.io.IOException;
 public interface FileOperations {
     VirtualFile saveFile(String directory, String filename, String content, Project project) throws IOException;
     String readFile(VirtualFile file);
+     String readResource(String path);
 }

@@ -5,7 +5,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
 import com.trickbd.codegpt.services.FactoryGeneratorService;
 import com.trickbd.codegpt.services.SeederGeneratorService;
@@ -41,24 +40,13 @@ public class SeederGenerator {
                 factoryGenerated(modelName, factoryContent);
             });
 
-            CompletableFuture<String> seederFutureResponse = seederGeneratorService.generateSeeder(model, modelName);
+            System.out.println("Factory generated");
 
-            ProgressTask seederProgressTask = new ProgressTask("Model Seeder Generator", "Generating " + modelName + " seeder...", seederFutureResponse);
-            ProgressManager.getInstance().run(seederProgressTask);
-
-            seederFutureResponse.thenAccept(seederContent -> {
-                // Handle successful response);
-                System.out.println("Seeder content: " + seederContent);
-
-
-                ApplicationManager.getApplication().invokeLater(() -> {
-                    seederGenerated(modelName, seederContent);
-                });
-            }).exceptionally(ex -> {
-                System.out.println("Error: " + ex.getMessage());
-                // Handle exception
-                return null;
+            String seederContent = seederGeneratorService.generateSeeder(modelName);
+            ApplicationManager.getApplication().invokeLater(() -> {
+                seederGenerated(modelName, seederContent);
             });
+
         }).exceptionally(ex -> {
             System.out.println("Error: " + ex.getMessage());
             // Handle exception
