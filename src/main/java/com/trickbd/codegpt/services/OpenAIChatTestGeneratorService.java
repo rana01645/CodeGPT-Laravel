@@ -1,6 +1,6 @@
 package com.trickbd.codegpt.services;
 
-import com.trickbd.codegpt.repository.api.OpenAIChatApi;
+import com.trickbd.codegpt.repository.api.chatAPiModel.ChatMessageRequest;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -13,8 +13,8 @@ public class OpenAIChatTestGeneratorService implements TestGeneratorService {
 
     @Override
     public CompletableFuture<String> generateTestCase(String model, String code) {
-        OpenAIChatApi.ChatMessageRequest[] messages = {
-                new OpenAIChatApi.ChatMessageRequest("user", "generate a PHP Laravel test class for this\n" + code)
+        ChatMessageRequest[] messages = {
+                new ChatMessageRequest("user", "generate a PHP Laravel test class for this\n" + code)
         };
 
         return chatService.sendChatRequest(model, messages);

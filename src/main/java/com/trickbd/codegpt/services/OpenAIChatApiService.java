@@ -1,6 +1,10 @@
 package com.trickbd.codegpt.services;
 
-import com.trickbd.codegpt.repository.api.OpenAIChatApi;
+import com.trickbd.codegpt.repository.api.*;
+import com.trickbd.codegpt.repository.api.chatAPiModel.ChatCompletionResponse;
+import com.trickbd.codegpt.repository.api.chatAPiModel.ChatMessageRequest;
+import com.trickbd.codegpt.repository.api.chatAPiModel.Choice;
+import com.trickbd.codegpt.repository.api.chatAPiModel.Message;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -12,12 +16,12 @@ public class OpenAIChatApiService implements OpenAIChatService {
     }
 
     @Override
-    public CompletableFuture<String> sendChatRequest(String model, OpenAIChatApi.ChatMessageRequest[] messages) {
-        CompletableFuture<OpenAIChatApi.ChatCompletionResponse> futureResponse = api.sendChatCompletionRequestAsync(model, messages);
+    public CompletableFuture<String> sendChatRequest(String model, ChatMessageRequest[] messages) {
+        CompletableFuture<ChatCompletionResponse> futureResponse = api.sendChatCompletionRequestAsync(model, messages);
 
         return futureResponse.thenApply(response -> {
-            for (OpenAIChatApi.Choice choice : response.getChoices()) {
-                OpenAIChatApi.Message message = choice.getMessage();
+            for (Choice choice : response.getChoices()) {
+                Message message = choice.getMessage();
                 return message.getContent();
             }
             return null;
