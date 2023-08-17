@@ -1,25 +1,21 @@
 package com.trickbd.codegpt.action;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
+import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.CodeExplainer;
-import com.trickbd.codegpt.generator.TestCaseGenerator;
-import com.trickbd.codegpt.repository.data.FileManager;
-import com.trickbd.codegpt.repository.data.LocalData;
+import com.trickbd.codegpt.repository.api.OpenAIChatApi;
+import com.trickbd.codegpt.repository.data.file.FileManager;
+import com.trickbd.codegpt.repository.data.local.LocalData;
+import com.trickbd.codegpt.services.CodeExplanationService;
+import com.trickbd.codegpt.services.OpenAIChatApiService;
+import com.trickbd.codegpt.services.OpenAIChatCodeExplanationService;
+import com.trickbd.codegpt.services.OpenAIChatService;
 import com.trickbd.codegpt.settings.SettingsPanel;
-
-import javax.swing.*;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class ExplainCodeAction extends AnAction {
 
@@ -36,7 +32,7 @@ public class ExplainCodeAction extends AnAction {
 
         // Get a reference to the current file
         VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
-        String contents = (new FileManager()).readFile(file);
+        String contents = FileManager.getInstance().readFile(file);
         if (contents == null) {
             return;
         }
@@ -45,17 +41,24 @@ public class ExplainCodeAction extends AnAction {
     }
 
     private void showExplanation(AnActionEvent e, String selectedText) {
-        String apiKey = LocalData.get("apiKey");
+        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get(Constants.API_KEY);
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
-                    (new CodeExplainer(apiKey1, selectedText, e)).explain();
+                    OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey1);
+                    OpenAIChatService chatService = new OpenAIChatApiService(api);
+                    CodeExplanationService service = new OpenAIChatCodeExplanationService(chatService);
+                    (new CodeExplainer(service, e)).explain(Constants.MODEL, selectedText);
                 }
             });
             settingsPanel.show();
             return;
         }
-        (new CodeExplainer(apiKey, selectedText, e)).explain();
+
+        OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey);
+        OpenAIChatService chatService = new OpenAIChatApiService(api);
+        CodeExplanationService service = new OpenAIChatCodeExplanationService(chatService);
+        (new CodeExplainer(service, e)).explain(Constants.MODEL, selectedText);
     }
 
     @Override

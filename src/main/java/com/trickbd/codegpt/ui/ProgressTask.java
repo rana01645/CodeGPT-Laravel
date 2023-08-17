@@ -12,7 +12,7 @@ public class ProgressTask extends Task.Backgroundable {
 
     private final String title;
 
-    public ProgressTask(@NotNull String title, @NotNull String message, @NotNull CompletableFuture<?> futureResponse) {
+    public ProgressTask(@NotNull String title, @NotNull String message, CompletableFuture<?> futureResponse) {
         super(null, title);
         this.title = title;
         this.futureResponse = futureResponse;
@@ -26,6 +26,11 @@ public void run(@NotNull ProgressIndicator indicator) {
     indicator.setText(title);
     indicator.setText2(message);
 
+    if (futureResponse == null) {
+        indicator.setIndeterminate(false);
+        indicator.setText("Done");
+        return;
+    }
     // Wait for the future to complete or for a cancellation request
       while (!futureResponse.isDone() && !indicator.isCanceled()) {
         indicator.checkCanceled();

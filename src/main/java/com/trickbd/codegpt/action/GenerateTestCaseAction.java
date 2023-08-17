@@ -1,16 +1,17 @@
 package com.trickbd.codegpt.action;
 
-import com.trickbd.codegpt.generator.TestCaseGenerator;
-import com.trickbd.codegpt.repository.data.FileManager;
-import com.trickbd.codegpt.repository.data.LocalData;
-import com.trickbd.codegpt.settings.SettingsPanel;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import com.trickbd.codegpt.constants.Constants;
+import com.trickbd.codegpt.generator.TestCaseGenerator;
+import com.trickbd.codegpt.repository.api.OpenAIChatApi;
+import com.trickbd.codegpt.repository.data.file.FileManager;
+import com.trickbd.codegpt.repository.data.local.LocalData;
+import com.trickbd.codegpt.services.*;
+import com.trickbd.codegpt.settings.SettingsPanel;
 
 public class GenerateTestCaseAction extends AnAction {
 
@@ -18,18 +19,21 @@ public class GenerateTestCaseAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         // Get a reference to the current file
         VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
-        String contents = (new FileManager()).readFile(file);
+        String contents = FileManager.getInstance().readFile(file);
         if (contents == null) {
             return;
         }
 
         //log the contents
-        String apiKey = LocalData.get("apiKey");
+        String apiKey = LocalData.getInstance(PropertiesComponent.getInstance()).get(Constants.API_KEY);
 
         if (apiKey == null || apiKey.isEmpty()) {
             SettingsPanel settingsPanel = new SettingsPanel(e, apiKey1 -> {
                 if (apiKey1 != null && !apiKey1.isEmpty()) {
-                    (new TestCaseGenerator(apiKey1, contents, file, e)).generateTestCase();
+                    OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey1);
+                    OpenAIChatService chatService = new OpenAIChatApiService(api);
+                    TestGeneratorService service = new OpenAIChatTestGeneratorService(chatService);
+                    (new TestCaseGenerator(service, file, e)).generateTestCase(Constants.MODEL,contents);
                 }
 
             });
@@ -37,7 +41,10 @@ public class GenerateTestCaseAction extends AnAction {
             return;
         }
 
-        (new TestCaseGenerator(apiKey, contents, file, e)).generateTestCase();
+        OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey);
+        OpenAIChatService chatService = new OpenAIChatApiService(api);
+        TestGeneratorService service = new OpenAIChatTestGeneratorService(chatService);
+        (new TestCaseGenerator(service, file, e)).generateTestCase(Constants.MODEL, contents);
 
     }
 

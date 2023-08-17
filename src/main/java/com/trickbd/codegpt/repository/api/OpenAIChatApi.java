@@ -1,6 +1,9 @@
 package com.trickbd.codegpt.repository.api;
 
 import com.google.gson.Gson;
+import com.trickbd.codegpt.repository.api.chatAPiModel.ChatCompletionRequest;
+import com.trickbd.codegpt.repository.api.chatAPiModel.ChatCompletionResponse;
+import com.trickbd.codegpt.repository.api.chatAPiModel.ChatMessageRequest;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -10,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class OpenAIChatApi {
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
+    private static OpenAIChatApi instance;
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
     private static final String BEARER_TOKEN_PREFIX = "Bearer ";
@@ -20,6 +24,14 @@ public class OpenAIChatApi {
 
     public OpenAIChatApi(String bearerToken) {
         this.bearerToken = bearerToken;
+    }
+
+    public static OpenAIChatApi getInstance(String apiKey) {
+        if (instance == null) {
+            instance = new OpenAIChatApi(apiKey);
+        }
+
+        return instance;
     }
 
     public ChatCompletionResponse sendChatCompletionRequest(String model, ChatMessageRequest[] messages) throws IOException {
@@ -67,150 +79,5 @@ public class OpenAIChatApi {
                 throw new CompletionException(e);
             }
         });
-}
-
-
-    public static class ChatCompletionRequest {
-        private final String model;
-        private final ChatMessageRequest[] messages;
-
-        public ChatCompletionRequest(String model, ChatMessageRequest[] messages) {
-            this.model = model;
-            this.messages = messages;
-        }
-
-        public String getModel() {
-            return model;
-        }
-
-        public ChatMessageRequest[] getMessages() {
-            return messages;
-        }
-    }
-
-    public static class ChatMessageRequest {
-        private final String role;
-        private final String content;
-
-        public ChatMessageRequest(String role, String content) {
-            this.role = role;
-            this.content = content;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public String getContent() {
-            return content;
-        }
-    }
-
-    public static class ChatCompletionResponse {
-        private final String id;
-        private final String object;
-        private final long created;
-        private final String model;
-        private final Usage usage;
-        private final Choice[] choices;
-
-        public ChatCompletionResponse(String id, String object, long created, String model, Usage usage, Choice[] choices) {
-            this.id = id;
-            this.object = object;
-            this.created = created;
-            this.model = model;
-            this.usage = usage;
-            this.choices = choices;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getObject() {
-            return object;
-        }
-
-        public long getCreated() {
-            return created;
-        }
-
-        public String getModel() {
-            return model;
-        }
-
-        public Usage getUsage() {
-            return usage;
-        }
-
-        public Choice[] getChoices() {
-            return choices;
-        }
-    }
-
-    public static class Usage {
-        private final int prompt_tokens;
-        private final int completion_tokens;
-        private final int total_tokens;
-
-        public Usage(int prompt_tokens, int completion_tokens, int total_tokens) {
-            this.prompt_tokens = prompt_tokens;
-            this.completion_tokens = completion_tokens;
-            this.total_tokens = total_tokens;
-        }
-
-        public int getPromptTokens() {
-            return prompt_tokens;
-        }
-
-        public int getCompletionTokens() {
-            return completion_tokens;
-        }
-
-        public int getTotalTokens() {
-            return total_tokens;
-        }
-    }
-
-    public static class Choice {
-        private final Message message;
-        private final String finish_reason;
-        private final int index;
-
-        public Choice(Message message, String finish_reason, int index) {
-            this.message = message;
-            this.finish_reason = finish_reason;
-            this.index = index;
-        }
-
-        public Message getMessage() {
-            return message;
-        }
-
-        public String getFinishReason() {
-            return finish_reason;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-    }
-
-    public static class Message {
-        private final String role;
-        private final String content;
-
-        public Message(String role, String content) {
-            this.role = role;
-            this.content = content;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public String getContent() {
-            return content;
-        }
     }
 }

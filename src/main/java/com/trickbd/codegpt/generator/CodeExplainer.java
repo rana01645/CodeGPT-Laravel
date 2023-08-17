@@ -2,61 +2,44 @@ package com.trickbd.codegpt.generator;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import com.trickbd.codegpt.repository.api.OpenAIChatApi;
+import com.trickbd.codegpt.services.CodeExplanationService;
 import com.trickbd.codegpt.ui.ProgressTask;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.CompletableFuture;
 
 public class CodeExplainer {
-    String apiKey;
-    String contents;
+
+    private final CodeExplanationService codeExplanationService;
 
 
     AnActionEvent e;
 
-    public CodeExplainer(String apiKey, String contents, AnActionEvent e) {
-        this.apiKey = apiKey;
-        this.contents = contents;
+    public CodeExplainer(CodeExplanationService codeExplanationService, AnActionEvent e) {
+        this.codeExplanationService = codeExplanationService;
         this.e = e;
     }
 
-    public void explain() {
-
-        OpenAIChatApi api = new OpenAIChatApi(apiKey);
-
-        String model = "gpt-3.5-turbo";
-        OpenAIChatApi.ChatMessageRequest[] messages = {
-                new OpenAIChatApi.ChatMessageRequest("user", "Explain this Code\n" + contents)
-        };
-
-        CompletableFuture<OpenAIChatApi.ChatCompletionResponse> futureResponse = api.sendChatCompletionRequestAsync(model, messages);
+    public void explain(String model, String contents) {
+        CompletableFuture<String> futureResponse = codeExplanationService.explainCode(model, contents);
 
         ProgressTask progressTask = new ProgressTask("Code explainer", "Generating code explanation...", futureResponse);
         ProgressManager.getInstance().run(progressTask);
 
-        futureResponse.thenAccept(response -> {
+        futureResponse.thenAccept(explained -> {
             // Handle successful response
-            for (OpenAIChatApi.Choice choice : response.getChoices()) {
-                OpenAIChatApi.Message message = choice.getMessage();
+            ApplicationManager.getApplication().invokeLater(() -> {
+                showRightPanel(explained);
+            });
 
-                String content = message.getContent();
-
-                ApplicationManager.getApplication().invokeLater(() -> {
-                    showRightPanel(content);
-                });
-            }
         }).exceptionally(ex -> {
             System.out.println("error" + ex.getMessage());
             // Handle exception

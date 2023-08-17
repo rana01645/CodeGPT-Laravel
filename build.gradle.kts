@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.afjalurrana"
-version = "1.03"
+version = "1.04"
 
 repositories {
   mavenCentral()
@@ -21,7 +21,9 @@ intellij {
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.github.spullara.mustache.java:compiler:0.9.5")
 }
+
 
 
 tasks {
@@ -33,7 +35,7 @@ tasks {
 
   patchPluginXml {
     sinceBuild.set("213")
-    untilBuild.set("231.*")
+    untilBuild.set("240.*")
   }
 
   signPlugin {

@@ -1,7 +1,7 @@
 package com.trickbd.codegpt.helper;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import com.trickbd.codegpt.repository.data.FileManager;
+import com.trickbd.codegpt.repository.data.file.FileManager;
 
 public class ModelParser {
 
@@ -44,34 +44,6 @@ public class ModelParser {
         String modelName = className.replace("App\\Models\\", "");
 
         return modelName;
-    }
-
-    public static String parseTableName(String migrationContents) {
-        // Find the "Schema::create" call inside the migration closure
-        int startIndex = migrationContents.indexOf("Schema::create");
-        int endIndex = migrationContents.indexOf("});", startIndex);
-        String createStatement = migrationContents.substring(startIndex, endIndex);
-
-        // Extract the table name argument from the "Schema::create" call
-        int tableNameStartIndex = createStatement.indexOf("('") + 2;
-        int tableNameEndIndex = createStatement.indexOf("'", tableNameStartIndex);
-        String tableName = createStatement.substring(tableNameStartIndex, tableNameEndIndex);
-
-        return tableName;
-    }
-
-    public static String parseColumns(String migrationContents) {
-        // Find the "Schema::create" call inside the migration closure
-        int startIndex = migrationContents.indexOf("Schema::create");
-        int endIndex = migrationContents.indexOf("});", startIndex);
-        String createStatement = migrationContents.substring(startIndex, endIndex);
-
-        // Extract the columns argument from the "Schema::create" call
-        int columnsStartIndex = createStatement.indexOf("function (Blueprint $table) {") + "function (Blueprint $table) {".length();
-        int columnsEndIndex = createStatement.indexOf("});", columnsStartIndex) + 2;
-        String columnsArray = createStatement.substring(columnsStartIndex, columnsEndIndex);
-
-        return columnsArray;
     }
 
 }
