@@ -5,7 +5,7 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>CodeGPT - ChatGPT For Laravel</name>
+    <name>LaraGPT - ChatGPT For Laravel</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
     <vendor email="plugin@trickbd.com" url="https://www.trickbd.com">Trickbd</vendor>
@@ -14,7 +14,7 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    CodeGPT For Laravel is a powerful IntelliJ plugin that helps Laravel developers to write code faster and with less effort using ChatGPT API. With this plugin, you can generate test cases for your Laravel code base and explain specific code in human-readable format using OpenAI's Codex API (ChatGPT API). Save time and write better code with CodeGPT - ChatGPT For Laravel.
+    LaraGPT For Laravel is a powerful IntelliJ plugin that helps Laravel developers to write code faster and with less effort using ChatGPT API. With this plugin, you can generate test cases for your Laravel code base and explain specific code in human-readable format using OpenAI's Codex API (ChatGPT API). Save time and write better code with LaraGPT - ChatGPT For Laravel.
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -29,28 +29,28 @@
 
     </extensions>
     <actions>
-        <group id="GenerateTestCaseGroup" text="CodeGPT - Generate Test Case">
+        <group id="GenerateTestCaseGroup" text="LaraGPT - Generate Test Case">
             <action id="GenerateTestCaseAction" class="com.trickbd.codegpt.action.GenerateTestCaseAction"
-                    text="CodeGPT - Generate Test Case"
+                    text="LaraGPT - Generate Test Case"
                     icon="AllIcons.Nodes.Test"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
-        <group id="GenerateSeederGroup" text="CodeGPT - Generate Factory And Seeder">
+        <group id="GenerateSeederGroup" text="LaraGPT - Generate Factory And Seeder">
             <action id="GenerateSeederGroupAction" class="com.trickbd.codegpt.action.GenerateSeederAction"
-                    text="CodeGPT - Generate Factory And Seeder"
+                    text="LaraGPT - Generate Factory And Seeder"
                     icon="AllIcons.Diff.MagicResolve"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
-        <group id="ExplainCodeGroup" text="CodeGPT - Explain This Code">
+        <group id="ExplainCodeGroup" text="LaraGPT - Explain This Code">
             <action id="ExplainCodeAction" class="com.trickbd.codegpt.action.ExplainCodeAction"
-                    text="CodeGPT - Explain This Code"
+                    text="LaraGPT - Explain This Code"
                     icon="AllIcons.RunConfigurations.TestUnknown"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
 
-        <group id="UpdateAPIKeyGroup" text="CodeGPT - Manage API Key">
+        <group id="UpdateAPIKeyGroup" text="LaraGPT - Manage API Key">
             <action id="UpdateAPIKeyAction" class="com.trickbd.codegpt.action.UpdateOrChangeApiKeyAction"
-                    text="CodeGPT - Manage API Key"
+                    text="LaraGPT - Manage API Key"
                     icon="AllIcons.Nodes.KeymapEditor"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </group>
