@@ -5,25 +5,19 @@ import com.intellij.openapi.vfs.VirtualFile;
 
 import java.io.IOException;
 
+/**
+ * FileManager handles file read/write operations using injected dependencies.
+ * This follows best practices of dependency injection and testability.
+ */
 public class FileManager implements FileOperations {
-    private static FileManager instance;
     private final FileWriter fileWriter;
     private final FileReader fileReader;
-
     private final ResourceFileReader resourceFileReader;
 
     public FileManager(FileWriter fileWriter, FileReader fileReader, ResourceFileReader resourceFileReader) {
         this.fileWriter = fileWriter;
         this.fileReader = fileReader;
         this.resourceFileReader = resourceFileReader;
-    }
-
-
-    public static FileManager getInstance() {
-        if (instance == null) {
-            instance = new FileManager(new FileWriter(), new FileReader(), new ResourceFileReader());
-        }
-        return instance;
     }
 
     @Override

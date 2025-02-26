@@ -10,6 +10,7 @@ import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.CodeExplainer;
 import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
+import com.trickbd.codegpt.repository.data.file.FileManagerFactory;
 import com.trickbd.codegpt.repository.data.local.LocalData;
 import com.trickbd.codegpt.services.CodeExplanationService;
 import com.trickbd.codegpt.services.OpenAIChatApiService;
@@ -18,6 +19,12 @@ import com.trickbd.codegpt.services.OpenAIChatService;
 import com.trickbd.codegpt.settings.SettingsPanel;
 
 public class ExplainCodeAction extends AnAction {
+
+    private FileManager fileManager;
+
+    public ExplainCodeAction() {
+        this.fileManager = FileManagerFactory.createDefault();
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -32,7 +39,7 @@ public class ExplainCodeAction extends AnAction {
 
         // Get a reference to the current file
         VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
-        String contents = FileManager.getInstance().readFile(file);
+        String contents = fileManager.readFile(file);
         if (contents == null) {
             return;
         }

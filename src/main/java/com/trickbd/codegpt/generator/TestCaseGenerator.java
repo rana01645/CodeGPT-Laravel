@@ -23,10 +23,13 @@ public class TestCaseGenerator {
 
     private final TestGeneratorService testGeneratorService;
 
-    public TestCaseGenerator(TestGeneratorService testGeneratorService, VirtualFile file, AnActionEvent e) {
+    FileManager fileManager;
+
+    public TestCaseGenerator(TestGeneratorService testGeneratorService, VirtualFile file, AnActionEvent e, FileManager fileManager) {
         this.testGeneratorService = testGeneratorService;
         this.file = file;
         this.e = e;
+        this.fileManager = fileManager;
     }
 
     public void generateTestCase(String model,String contents) {
@@ -56,7 +59,7 @@ public class TestCaseGenerator {
             AtomicReference<VirtualFile> generatedFile = new AtomicReference<>();
             ApplicationManager.getApplication().runWriteAction(() -> {
                 try {
-                    generatedFile.set(FileManager.getInstance().saveFile(directory, filename, content.trim(), project));
+                    generatedFile.set(fileManager.saveFile(directory, filename, content.trim(), project));
                 } catch (IOException ex) {
                     System.out.println("error" + ex.getMessage());
                     throw new RuntimeException(ex);

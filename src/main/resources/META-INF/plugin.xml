@@ -17,6 +17,20 @@
     LaraGPT For Laravel is a powerful IntelliJ plugin that helps Laravel developers to write code faster and with less effort using ChatGPT API. With this plugin, you can generate test cases for your Laravel code base and explain specific code in human-readable format using OpenAI's Codex API (ChatGPT API). Save time and write better code with LaraGPT - ChatGPT For Laravel.
   ]]></description>
 
+    <change-notes><![CDATA[
+        <h2>New Features</h2>
+        <ul>
+          <li>Updated branding to the new name</li>
+          <li>Enhanced factory and seeder generation for improved performance and flexibility</li>
+        </ul>
+        <h2>Bug Fixes</h2>
+        <ul>
+          <li>Various stability and performance improvements</li>
+          <li>Fixed minor issues affecting data generation</li>
+        </ul>
+        ]]></change-notes>
+
+
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
@@ -29,31 +43,37 @@
 
     </extensions>
     <actions>
-        <group id="GenerateTestCaseGroup" text="LaraGPT - Generate Test Case">
-            <action id="GenerateTestCaseAction" class="com.trickbd.codegpt.action.GenerateTestCaseAction"
-                    text="LaraGPT - Generate Test Case"
+        <group id="Laragpt-Testcase-ToolsMenu" text="LaraGPT - AI Actions" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="GenerateTestCaseActionToolsMenu" class="com.trickbd.codegpt.action.GenerateTestCaseAction"
+                    text="Generate Test Case"
                     icon="AllIcons.Nodes.Test"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        </group>
-        <group id="GenerateSeederGroup" text="LaraGPT - Generate Factory And Seeder">
-            <action id="GenerateSeederGroupAction" class="com.trickbd.codegpt.action.GenerateSeederAction"
-                    text="LaraGPT - Generate Factory And Seeder"
+            <action id="GenerateSeederGroupActionToolsMenu" class="com.trickbd.codegpt.action.GenerateSeederAction"
+                    text="Generate Factory And Seeder"
                     icon="AllIcons.Diff.MagicResolve"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        </group>
-        <group id="ExplainCodeGroup" text="LaraGPT - Explain This Code">
-            <action id="ExplainCodeAction" class="com.trickbd.codegpt.action.ExplainCodeAction"
-                    text="LaraGPT - Explain This Code"
+            <action id="ExplainCodeActionToolsMenu" class="com.trickbd.codegpt.action.ExplainCodeAction"
+                    text="Explain This Code"
                     icon="AllIcons.RunConfigurations.TestUnknown"/>
+            <action id="UpdateAPIKeyActionToolsMenu" class="com.trickbd.codegpt.action.UpdateOrChangeApiKeyAction"
+                    text="Manage API Key"
+                    icon="AllIcons.Nodes.KeymapEditor"/>
+        </group>
+        <group id="Laragpt-Testcase-EditorPopupMenu" text="LaraGPT - AI Actions" popup="true">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <action id="GenerateTestCaseAction" class="com.trickbd.codegpt.action.GenerateTestCaseAction"
+                    text="Generate Test Case"
+                    icon="AllIcons.Nodes.Test"/>
+            <action id="GenerateSeederGroupAction" class="com.trickbd.codegpt.action.GenerateSeederAction"
+                    text="Generate Factory And Seeder"
+                    icon="AllIcons.Diff.MagicResolve"/>
+            <action id="ExplainCodeAction" class="com.trickbd.codegpt.action.ExplainCodeAction"
+                    text="Explain This Code"
+                    icon="AllIcons.RunConfigurations.TestUnknown"/>
+            <action id="UpdateAPIKeyAction" class="com.trickbd.codegpt.action.UpdateOrChangeApiKeyAction"
+                    text="Manage API Key"
+                    icon="AllIcons.Nodes.KeymapEditor"/>
         </group>
 
-        <group id="UpdateAPIKeyGroup" text="LaraGPT - Manage API Key">
-            <action id="UpdateAPIKeyAction" class="com.trickbd.codegpt.action.UpdateOrChangeApiKeyAction"
-                    text="LaraGPT - Manage API Key"
-                    icon="AllIcons.Nodes.KeymapEditor"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        </group>
 
     </actions>
 

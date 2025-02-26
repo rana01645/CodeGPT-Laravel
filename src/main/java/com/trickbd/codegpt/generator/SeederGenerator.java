@@ -19,11 +19,15 @@ public class SeederGenerator {
     FactoryGeneratorService factoryGeneratorService;
     SeederGeneratorService seederGeneratorService;
     private final AnActionEvent e;
+    private FileManager fileManager;
 
-    public SeederGenerator(FactoryGeneratorService factoryGeneratorService, SeederGeneratorService seederGeneratorService, AnActionEvent e) {
+    public SeederGenerator(FactoryGeneratorService factoryGeneratorService,
+                           SeederGeneratorService seederGeneratorService, AnActionEvent e, FileManager fileManager) {
         this.factoryGeneratorService = factoryGeneratorService;
         this.seederGeneratorService = seederGeneratorService;
         this.e = e;
+        this.fileManager = fileManager;
+
     }
 
     public void generateFactoryAndSeeder(String model, String modelName, String contents) {
@@ -65,7 +69,7 @@ public class SeederGenerator {
         ApplicationManager.getApplication().runWriteAction(() -> {
             try {
                 if (seederContent != null) {
-                    seederFile.set(FileManager.getInstance().saveFile(directory, seederFileName, seederContent.trim(), project));
+                    seederFile.set(fileManager.saveFile(directory, seederFileName, seederContent.trim(), project));
                 }
             } catch (IOException ex) {
                 System.out.println("Error: " + ex.getMessage());
@@ -90,7 +94,7 @@ public class SeederGenerator {
         ApplicationManager.getApplication().runWriteAction(() -> {
             try {
                 if (factoryContent != null) {
-                    factoryFile.set(FileManager.getInstance().saveFile(directory, factoryFileName, factoryContent.trim(), project));
+                    factoryFile.set(fileManager.saveFile(directory, factoryFileName, factoryContent.trim(), project));
                 }
             } catch (IOException ex) {
                 System.out.println("Error: " + ex.getMessage());

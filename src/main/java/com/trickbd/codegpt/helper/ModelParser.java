@@ -5,12 +5,18 @@ import com.trickbd.codegpt.repository.data.file.FileManager;
 
 public class ModelParser {
 
-    public static boolean isLaravelModel(VirtualFile file) {
+    FileManager fileManager;
+
+    public ModelParser(FileManager fileManager) {
+        this.fileManager = fileManager;
+    }
+
+    public boolean isLaravelModel(VirtualFile file) {
         if (file == null || file.isDirectory() || !file.getName().endsWith(".php")) {
             return false;
         }
 
-        String contents = FileManager.getInstance().readFile(file);
+        String contents = fileManager.readFile(file);
         if (contents.contains("extends Model")) {
             return true;
         }
@@ -19,12 +25,12 @@ public class ModelParser {
         return parent != null && parent.getName().equals("Models") && parent.getParent().getName().equals("app");
     }
 
-    public static boolean isLaravelMigration(VirtualFile file) {
+    public boolean isLaravelMigration(VirtualFile file) {
         if (file == null || file.isDirectory() || !file.getName().endsWith(".php")) {
             return false;
         }
 
-        String contents = FileManager.getInstance().readFile(file);
+        String contents = fileManager.readFile(file);
         if (!contents.contains("Schema::create") || !contents.contains("Blueprint")) {
             return false;
         }

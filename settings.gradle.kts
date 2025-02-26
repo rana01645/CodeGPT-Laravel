@@ -1,1 +1,1 @@
-rootProject.name = "CodeGPT"
+rootProject.name = "LaraGPT"

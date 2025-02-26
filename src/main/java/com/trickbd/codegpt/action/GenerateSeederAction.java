@@ -16,20 +16,30 @@ import com.trickbd.codegpt.helper.ModelFinder;
 import com.trickbd.codegpt.helper.ModelParser;
 import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
+import com.trickbd.codegpt.repository.data.file.FileManagerFactory;
 import com.trickbd.codegpt.repository.data.local.LocalData;
 import com.trickbd.codegpt.services.*;
 import com.trickbd.codegpt.settings.SettingsPanel;
-
-import static com.trickbd.codegpt.helper.ModelParser.isLaravelMigration;
-import static com.trickbd.codegpt.helper.ModelParser.isLaravelModel;
+import com.trickbd.codegpt.ui.Notifier;
 
 public class GenerateSeederAction extends AnAction {
+
+    ModelParser modelParser;
+    FileManager fileManager;
+    ModelFinder modelFinder;
+
+    public GenerateSeederAction() {
+        fileManager = FileManagerFactory.createDefault();
+        this.modelParser = new ModelParser(fileManager);
+        this.modelFinder = new ModelFinder(fileManager);
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
         // Get a reference to the current file
-        VirtualFile modelFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
-        if (modelFile == null) {
+        VirtualFile fileName = e.getData(CommonDataKeys.VIRTUAL_FILE);
+        if (fileName == null) {
+            Notifier.notifyError("File not found", "File not found to generate migration and seeder");
             return;
         }
 
@@ -40,9 +50,10 @@ public class GenerateSeederAction extends AnAction {
 
 
         // Check if the file is a Laravel model
-        boolean isModel = isLaravelModel(modelFile);
-        boolean isMigration = isLaravelMigration(modelFile);
+        boolean isModel = modelParser.isLaravelModel(fileName);
+        boolean isMigration = modelParser.isLaravelMigration(fileName);
         if (!isModel && !isMigration) {
+            Notifier.notifyError("Invalid file", "Invalid file to generate migration and seeder");
             return;
         }
 
@@ -51,18 +62,19 @@ public class GenerateSeederAction extends AnAction {
 
         if (isModel) {
             VirtualFile migrationFile;
-            modelName = ModelParser.parseModelName(FileManager.getInstance().readFile(modelFile));
-            migrationFile = (new ModelFinder()).findMigrationFileForModel(modelName, project, new CaseChanger());
+            modelName = ModelParser.parseModelName(fileManager.readFile(fileName));
+            migrationFile = modelFinder.findMigrationFileForModel(modelName, project, new CaseChanger());
             if (migrationFile == null) {
+                Notifier.notifyError("Migration file not found", "Migration file not found for model " + modelName);
                 return;
             }
 
             // Read the contents of the model and migration files
-            migrationContents = FileManager.getInstance().readFile(migrationFile);
+            migrationContents = fileManager.readFile(migrationFile);
         } else {
             // Read the contents of the model and migration files
-            modelName = (new ModelFinder()).findModelNameForMigration(modelFile, new CaseChanger());
-            migrationContents = FileManager.getInstance().readFile(modelFile);
+            modelName = modelFinder.findModelNameForMigration(fileName, new CaseChanger());
+            migrationContents = fileManager.readFile(fileName);
         }
 
 
@@ -86,17 +98,16 @@ public class GenerateSeederAction extends AnAction {
         OpenAIChatService chatService = new OpenAIChatApiService(chatApi);
         FactoryGeneratorService factoryGeneratorService = new OpenAIChatFactoryGeneratorService(chatService);
 
-        FileManager fileManager = FileManager.getInstance();
         TemplateEngine templateEngine = new MustacheTemplateEngine();
         SeederGeneratorService seederGeneratorService = new ModelSeederGeneratorService(fileManager, templateEngine);
-        (new SeederGenerator(factoryGeneratorService, seederGeneratorService, e)).generateFactoryAndSeeder(Constants.MODEL, modelName, migrationContents);
+        (new SeederGenerator(factoryGeneratorService, seederGeneratorService, e,fileManager)).generateFactoryAndSeeder(Constants.MODEL, modelName, migrationContents);
     }
 
 
     @Override
     public void update(AnActionEvent e) {
         VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
-        boolean isEnabled = isLaravelModel(file) || isLaravelMigration(file);
+        boolean isEnabled = modelParser.isLaravelModel(file) || modelParser.isLaravelMigration(file);
         e.getPresentation().setEnabledAndVisible(isEnabled);
     }
 

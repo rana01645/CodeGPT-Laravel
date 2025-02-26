@@ -53,9 +53,9 @@ public class CodeExplainer {
         assert project != null;
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
         // Find or create the ToolWindow
-        ToolWindow toolWindow = toolWindowManager.getToolWindow("CodeGPT - Code Explainer");
+        ToolWindow toolWindow = toolWindowManager.getToolWindow("LaraGPT - Code Explainer");
         if (toolWindow == null) {
-            toolWindow = toolWindowManager.registerToolWindow("CodeGPT - Code Explainer", false,
+            toolWindow = toolWindowManager.registerToolWindow("LaraGPT - Code Explainer", false,
                     ToolWindowAnchor.RIGHT);
         }
         // Create the Content

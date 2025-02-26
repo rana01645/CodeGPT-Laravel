@@ -9,17 +9,24 @@ import com.trickbd.codegpt.constants.Constants;
 import com.trickbd.codegpt.generator.TestCaseGenerator;
 import com.trickbd.codegpt.repository.api.OpenAIChatApi;
 import com.trickbd.codegpt.repository.data.file.FileManager;
+import com.trickbd.codegpt.repository.data.file.FileManagerFactory;
 import com.trickbd.codegpt.repository.data.local.LocalData;
 import com.trickbd.codegpt.services.*;
 import com.trickbd.codegpt.settings.SettingsPanel;
 
 public class GenerateTestCaseAction extends AnAction {
 
+    FileManager fileManager;
+
+    public GenerateTestCaseAction() {
+        this.fileManager = FileManagerFactory.createDefault();
+    }
+
     @Override
     public void actionPerformed(AnActionEvent e) {
         // Get a reference to the current file
         VirtualFile file = e.getData(CommonDataKeys.VIRTUAL_FILE);
-        String contents = FileManager.getInstance().readFile(file);
+        String contents = fileManager.readFile(file);
         if (contents == null) {
             return;
         }
@@ -33,7 +40,7 @@ public class GenerateTestCaseAction extends AnAction {
                     OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey1);
                     OpenAIChatService chatService = new OpenAIChatApiService(api);
                     TestGeneratorService service = new OpenAIChatTestGeneratorService(chatService);
-                    (new TestCaseGenerator(service, file, e)).generateTestCase(Constants.MODEL,contents);
+                    (new TestCaseGenerator(service, file, e,fileManager)).generateTestCase(Constants.MODEL,contents);
                 }
 
             });
@@ -44,7 +51,7 @@ public class GenerateTestCaseAction extends AnAction {
         OpenAIChatApi api = OpenAIChatApi.getInstance(apiKey);
         OpenAIChatService chatService = new OpenAIChatApiService(api);
         TestGeneratorService service = new OpenAIChatTestGeneratorService(chatService);
-        (new TestCaseGenerator(service, file, e)).generateTestCase(Constants.MODEL, contents);
+        (new TestCaseGenerator(service, file, e,fileManager)).generateTestCase(Constants.MODEL, contents);
 
     }
 
